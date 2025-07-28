@@ -1,227 +1,238 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Luartor - Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <title>Luartor - Advanced Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Rubik:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
-    @keyframes gradientBG {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-    @keyframes fadeInUp {
-      0% {opacity:0;transform:translateY(20px);}
-      100% {opacity:1;transform:none;}
-    }
-    @keyframes pulse {
-      0%,100% {transform:scale(1);}
-      50% {transform:scale(1.05);}
-    }
     :root {
       --primary: #4f46e5;
       --secondary: #06b6d4;
       --dark-bg: #0f172a;
       --text-light: #f8fafc;
       --accent: #6366f1;
-      --error-color: #ef4444;
-      --success-color: #10b981;
       --input-bg: #1e293b;
       --input-border: #334155;
+      --error: #ef4444;
+      --success: #10b981;
     }
+
     * {
       box-sizing: border-box;
-      user-select:none;
+      margin: 0;
+      padding: 0;
     }
-    body,html {
-      margin:0;
-      height:100%;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(270deg, #1e293b, #0f172a, #334155);
-      background-size: 600% 600%;
-      animation: gradientBG 18s ease infinite;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      overflow:hidden;
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      background-size: 400% 400%;
+      animation: gradientFlow 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       color: var(--text-light);
+      overflow: hidden;
     }
-    .container {
-      background: rgba(15, 23, 42, 0.85);
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(14px);
       border-radius: 24px;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
-      width: 360px;
-      max-width: 95vw;
-      padding: 36px 32px 48px;
-      display:flex;
-      flex-direction: column;
-      animation: fadeInUp 0.8s ease forwards;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      width: 500px;
+      max-width: 92vw;
+      padding: 50px 40px;
+      animation: fadeIn 1.2s ease forwards;
       position: relative;
     }
-    h1 {
-      font-weight: 700;
-      font-size: 2.25rem;
-      background: linear-gradient(90deg, var(--secondary), var(--primary));
+
+    .glass-card h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.75rem;
+      text-align: center;
+      background: linear-gradient(to right, var(--secondary), var(--primary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 20px;
-      text-align:center;
+      margin-bottom: 30px;
     }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
     label {
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 8px;
       display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
+
     input[type="text"] {
       width: 100%;
-      padding: 14px 16px;
-      font-size: 1rem;
-      border-radius: 14px;
+      padding: 16px;
+      background: var(--input-bg);
       border: 2px solid var(--input-border);
-      background-color: var(--input-bg);
+      border-radius: 12px;
       color: var(--text-light);
-      outline:none;
-      transition: border-color 0.3s ease;
-      font-family: 'Poppins', monospace;
-      letter-spacing: 0.15em;
-      user-select:text;
-    }
-    input[type="text"]:focus {
-      border-color: var(--secondary);
-      box-shadow: 0 0 16px var(--secondary);
-    }
-    button {
-      margin-top: 28px;
-      padding: 14px 0;
-      border-radius: 20px;
-      border:none;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      color: white;
-      font-weight: 700;
-      font-size: 1.15rem;
-      cursor: pointer;
-      user-select:none;
-      transition: background 0.4s ease;
-      animation: pulse 2.4s infinite;
-      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.6);
-    }
-    button:hover {
-      background: linear-gradient(90deg, var(--secondary), var(--primary));
-      box-shadow: 0 8px 24px rgba(6, 182, 212, 0.8);
-    }
-    button:disabled {
-      opacity: 0.5;
-      cursor: default;
-      animation:none;
-      box-shadow:none;
-    }
-    .status {
-      margin-top: 14px;
-      min-height: 22px;
-      text-align:center;
-      font-weight: 600;
       font-size: 1rem;
-      user-select:none;
+      font-family: monospace;
+      letter-spacing: 0.1em;
+      outline: none;
     }
-    .status.error {
-      color: var(--error-color);
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
     }
-    .status.success {
-      color: var(--success-color);
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border: none;
+      border-radius: 16px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.6);
+      transition: all 0.3s ease;
     }
+
+    button:hover {
+      background: linear-gradient(to right, var(--secondary), var(--primary));
+      box-shadow: 0 14px 36px rgba(79, 70, 229, 0.75);
+    }
+
+    button:disabled {
+      background: #334155;
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+    }
+
+    .status {
+      margin-top: 16px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+      min-height: 20px;
+    }
+
+    .status.success { color: var(--success); }
+    .status.error { color: var(--error); }
+
     .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .logo {
       position: absolute;
-      bottom: 14px;
+      top: -40px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.8rem;
-      color: #64748b;
-      user-select:none;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
 <body>
-  <main class="container" role="main" aria-label="Login Form">
-    <h1>Luartor Login</h1>
-    <label for="apikey">Enter API Key</label>
-    <input id="apikey" name="apikey" type="text" maxlength="32" autocomplete="off" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" spellcheck="false" aria-describedby="status" />
-    <button id="loginBtn" aria-live="polite" aria-busy="false" disabled>Verify & Login</button>
-    <div id="status" class="status" role="alert" aria-atomic="true"></div>
-    <div class="footer">© 2025 Luartor by TheBestDragon</div>
-  </main>
+  <div class="glass-card">
+    <div class="logo">L</div>
+    <h1>Luartor Access</h1>
+    <div class="form-group">
+      <label for="apikey">API Key</label>
+      <input type="text" id="apikey" placeholder="Enter 32-char API Key" maxlength="32" spellcheck="false" />
+    </div>
+    <button id="loginBtn" disabled>Authenticate</button>
+    <div class="status" id="status"></div>
+    <div class="footer">Luartor © 2025. Built by TheBestDragon.</div>
+  </div>
 
-<script>
-(() => {
-  const loginBtn = document.getElementById('loginBtn');
-  const apikeyInput = document.getElementById('apikey');
-  const statusEl = document.getElementById('status');
-  let validKeys = {};
-  let keyCheckInterval = null;
+  <script>
+    (() => {
+      const loginBtn = document.getElementById('loginBtn');
+      const apikeyInput = document.getElementById('apikey');
+      const statusEl = document.getElementById('status');
+      let validKeys = {};
 
-  function setStatus(msg, success = false) {
-    statusEl.textContent = msg;
-    statusEl.className = success ? 'status success' : 'status error';
-  }
-  function clearStatus() {
-    statusEl.textContent = '';
-    statusEl.className = 'status';
-  }
-  function enableButton(enabled) {
-    loginBtn.disabled = !enabled;
-  }
+      const setStatus = (msg, type = 'error') => {
+        statusEl.textContent = msg;
+        statusEl.className = `status ${type}`;
+      };
 
-  async function fetchKeys() {
-    try {
-      const resp = await fetch('https://raw.githubusercontent.com/RealMaybecool/Luartor/refs/heads/main/apikey.json', {cache:'no-store'});
-      if(!resp.ok) throw new Error(`Failed to fetch keys: ${resp.status}`);
-      const data = await resp.json();
-      validKeys = data;
-    } catch(e) {
-      validKeys = {};
-      setStatus('Unable to load key database.', false);
-    }
-  }
-  function checkKey(key) {
-    if(!key || key.length !== 32) return false;
-    return Object.keys(validKeys).some(k => k.toLowerCase() === key.toLowerCase());
-  }
-  function getCompanyByKey(key) {
-    return validKeys[key.toLowerCase()] || null;
-  }
+      const enableButton = (enable) => {
+        loginBtn.disabled = !enable;
+      };
 
-  apikeyInput.addEventListener('input', () => {
-    clearStatus();
-    const val = apikeyInput.value.trim();
-    if(val.length === 32) enableButton(true);
-    else enableButton(false);
-  });
+      const fetchKeys = async () => {
+        try {
+          const res = await fetch('https://raw.githubusercontent.com/RealMaybecool/Luartor/refs/heads/main/apikey.json', {cache: 'no-store'});
+          const data = await res.json();
+          validKeys = data;
+        } catch (e) {
+          setStatus('Error fetching keys.', 'error');
+        }
+      };
 
-  loginBtn.addEventListener('click', e => {
-    e.preventDefault();
-    const key = apikeyInput.value.trim();
-    if(!checkKey(key)) {
-      setStatus('Invalid API key. Please check and try again.', false);
-      return;
-    }
-    setStatus('Valid key! Redirecting...', true);
-    loginBtn.disabled = true;
-    apikeyInput.disabled = true;
-    setTimeout(() => {
-      const company = getCompanyByKey(key);
-      window.location.href = `dashboard.html?company=${encodeURIComponent(company)}&key=${encodeURIComponent(key)}`;
-    }, 1200);
-  });
+      const validateKey = (key) => {
+        return key.length === 32 && Object.keys(validKeys).includes(key.toLowerCase());
+      };
 
-  async function init() {
-    setStatus('Loading key database...');
-    await fetchKeys();
-    clearStatus();
-    keyCheckInterval = setInterval(fetchKeys, 2*60*1000);
-  }
-  init();
-})();
-</script>
+      const getCompany = (key) => {
+        return validKeys[key.toLowerCase()] || 'default';
+      };
+
+      apikeyInput.addEventListener('input', () => {
+        const key = apikeyInput.value.trim();
+        enableButton(key.length === 32);
+        statusEl.textContent = '';
+      });
+
+      loginBtn.addEventListener('click', () => {
+        const key = apikeyInput.value.trim();
+        if (!validateKey(key)) {
+          setStatus('Invalid key.', 'error');
+          return;
+        }
+        setStatus('Access granted. Redirecting...', 'success');
+        loginBtn.disabled = true;
+        setTimeout(() => {
+          const company = getCompany(key);
+          window.location.href = `dashboard.html?company=${encodeURIComponent(company)}&key=${encodeURIComponent(key)}`;
+        }, 1200);
+      });
+
+      fetchKeys();
+      setInterval(fetchKeys, 60000);
+    })();
+  </script>
 </body>
-</html>
+</html>z
