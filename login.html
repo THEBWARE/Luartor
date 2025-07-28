@@ -1,281 +1,238 @@
-!DOCTYPE html>
-<html lang="en" >
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Luartor | API Key Login</title>
+  <title>Luartor - Advanced Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Rubik:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    :root {
+      --primary: #4f46e5;
+      --secondary: #06b6d4;
+      --dark-bg: #0f172a;
+      --text-light: #f8fafc;
+      --accent: #6366f1;
+      --input-bg: #1e293b;
+      --input-border: #334155;
+      --error: #ef4444;
+      --success: #10b981;
+    }
+
     * {
       box-sizing: border-box;
-      user-select:none;
+      margin: 0;
+      padding: 0;
     }
-    body {
-      margin:0;
-      height:100vh;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      font-family: 'Poppins', sans-serif;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      overflow:hidden;
-      color:#eee;
-    }
-    #app {
-      background: rgba(15, 22, 30, 0.95);
-      border-radius: 24px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      width: 420px;
-      max-width: 90vw;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      animation: fadeInScale 0.6s ease forwards;
-    }
-    @keyframes fadeInScale {
-      0% {opacity: 0; transform: scale(0.8);}
-      100% {opacity: 1; transform: scale(1);}
-    }
-    header {
-      background: linear-gradient(90deg, #4e54c8, #8f94fb);
-      padding: 24px;
-      font-weight: 600;
-      font-size: 1.6rem;
-      text-align: center;
-      letter-spacing: 2px;
-      color: white;
-      box-shadow: 0 4px 8px rgba(78, 84, 200, 0.5);
-      user-select:none;
-    }
-    nav {
-      display: flex;
-      background: #1e2733;
-      user-select:none;
-    }
-    nav button {
-      flex: 1;
-      background: none;
-      border: none;
-      padding: 18px 0;
-      font-weight: 600;
-      color: #aaa;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: color 0.3s ease;
-      border-bottom: 3px solid transparent;
-    }
-    nav button.active {
-      color: #8f94fb;
-      border-bottom: 3px solid #8f94fb;
-      cursor: default;
-    }
-    nav button:hover:not(.active) {
-      color: #d0d0ff;
-    }
-    main {
-      padding: 32px 28px 40px;
-      background: #121822;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-    }
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 10px;
-      letter-spacing: 0.03em;
-      color: #bbb;
-    }
-    input[type="text"] {
+
+    html, body {
       width: 100%;
-      padding: 14px 18px;
-      font-size: 1.1rem;
-      border-radius: 14px;
-      border: none;
-      outline: none;
-      background: #222c3c;
-      color: white;
-      transition: box-shadow 0.3s ease;
-      box-shadow: inset 0 0 6px rgba(143,148,251,0.2);
-      font-family: 'Poppins', sans-serif;
-      letter-spacing: 0.05em;
-    }
-    input[type="text"]:focus {
-      box-shadow: inset 0 0 12px #8f94fb;
-    }
-    button.login-btn {
-      margin-top: 24px;
-      padding: 15px 0;
-      background: #4e54c8;
-      background: linear-gradient(135deg, #4e54c8, #8f94fb);
-      border: none;
-      border-radius: 16px;
-      color: white;
-      font-weight: 700;
-      font-size: 1.15rem;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(78,84,200,0.5);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      user-select:none;
+      height: 100%;
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      background-size: 400% 400%;
+      animation: gradientFlow 15s ease infinite;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      color: var(--text-light);
+      overflow: hidden;
     }
-    button.login-btn:hover:not(:disabled) {
-      background: linear-gradient(135deg, #675ee3, #a3a8f9);
-      box-shadow: 0 10px 20px rgba(105, 94, 227, 0.7);
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    button.login-btn:disabled {
-      cursor: not-allowed;
-      background: #444a6a;
-      box-shadow: none;
-      color: #999;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .message {
-      margin-top: 22px;
-      font-weight: 600;
-      min-height: 1.4em;
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      width: 500px;
+      max-width: 92vw;
+      padding: 50px 40px;
+      animation: fadeIn 1.2s ease forwards;
+      position: relative;
+    }
+
+    .glass-card h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.75rem;
       text-align: center;
-      letter-spacing: 0.05em;
-      user-select:none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
+      background: linear-gradient(to right, var(--secondary), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 30px;
     }
-    .message.show {
-      opacity: 1;
+
+    .form-group {
+      margin-bottom: 24px;
     }
-    .message.success {
-      color: #6dd400;
-      text-shadow: 0 0 6px #6dd400aa;
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
-    .message.error {
-      color: #ff5c5c;
-      text-shadow: 0 0 6px #ff5c5caa;
+
+    input[type="text"] {
+      width: 100%;
+      padding: 16px;
+      background: var(--input-bg);
+      border: 2px solid var(--input-border);
+      border-radius: 12px;
+      color: var(--text-light);
+      font-size: 1rem;
+      font-family: monospace;
+      letter-spacing: 0.1em;
+      outline: none;
     }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border: none;
+      border-radius: 16px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, var(--secondary), var(--primary));
+      box-shadow: 0 14px 36px rgba(79, 70, 229, 0.75);
+    }
+
+    button:disabled {
+      background: #334155;
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+    }
+
+    .status {
+      margin-top: 16px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+      min-height: 20px;
+    }
+
+    .status.success { color: var(--success); }
+    .status.error { color: var(--error); }
+
     .footer {
-      text-align:center;
-      font-size: 0.8rem;
-      color: #555a7b;
-      margin-top: 12px;
-      user-select:none;
-      font-style: italic;
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: #94a3b8;
     }
-    /* Spinner */
-    .spinner {
-      border: 3px solid #eee3;
-      border-top: 3px solid #8f94fb;
+
+    .logo {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      animation: spin 1s linear infinite;
-      margin-left: 10px;
-    }
-    @keyframes spin {
-      0%{transform:rotate(0deg);}
-      100%{transform:rotate(360deg);}
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
 <body>
-  <div id="app" role="main" aria-label="Luartor API Key Login">
-    <header>LUARTOR</header>
-    <nav aria-label="Main Navigation">
-      <button class="active" aria-current="page" id="tab-login" tabindex="0">Login</button>
-      <button disabled style="opacity:.4;cursor:not-allowed;" tabindex="-1">Other Tab</button>
-    </nav>
-    <main>
-      <label for="apiKeyInput">Enter your 32-digit API key</label>
-      <input id="apiKeyInput" type="text" maxlength="32" autocomplete="off" spellcheck="false" inputmode="text" aria-describedby="msg" aria-required="true" autofocus />
-      <button id="loginBtn" class="login-btn" disabled>Loading keys<span class="spinner"></span></button>
-      <div id="msg" class="message" aria-live="polite"></div>
-    </main>
-    <div class="footer">© 2025 Luartor by TheBestDragon</div>
+  <div class="glass-card">
+    <div class="logo">L</div>
+    <h1>Luartor Access</h1>
+    <div class="form-group">
+      <label for="apikey">API Key</label>
+      <input type="text" id="apikey" placeholder="Enter 32-char API Key" maxlength="32" spellcheck="false" />
+    </div>
+    <button id="loginBtn" disabled>Authenticate</button>
+    <div class="status" id="status"></div>
+    <div class="footer">Luartor © 2025. Built by TheBestDragon.</div>
   </div>
+
   <script>
     (() => {
-      const url = 'https://raw.githubusercontent.com/RealMaybecool/Luartor/refs/heads/main/apikey.json'
-      const app = document.getElementById('app')
-      const input = document.getElementById('apiKeyInput')
-      const btn = document.getElementById('loginBtn')
-      const msg = document.getElementById('msg')
+      const loginBtn = document.getElementById('loginBtn');
+      const apikeyInput = document.getElementById('apikey');
+      const statusEl = document.getElementById('status');
+      let validKeys = {};
 
-      let keys = {}
-      let loading = true
-      let refreshInterval = 120000 // 2 minutes
-      let lastCheck = 0
+      const setStatus = (msg, type = 'error') => {
+        statusEl.textContent = msg;
+        statusEl.className = `status ${type}`;
+      };
 
-      function setMessage(text = '', type = '') {
-        msg.textContent = text
-        msg.className = 'message show ' + (type || '')
-      }
-      function clearMessage() {
-        msg.textContent = ''
-        msg.className = 'message'
-      }
+      const enableButton = (enable) => {
+        loginBtn.disabled = !enable;
+      };
 
-      function validateFormat(k) {
-        return /^[a-zA-Z0-9]{32}$/.test(k)
-      }
-
-      async function fetchKeys() {
+      const fetchKeys = async () => {
         try {
-          btn.disabled = true
-          btn.innerHTML = 'Loading keys<span class="spinner"></span>'
-          const res = await fetch(url, {cache: "no-store"})
-          if(!res.ok) throw new Error('Fetch error')
-          keys = await res.json()
-          btn.disabled = false
-          btn.textContent = 'Login'
-          clearMessage()
-          loading = false
-          lastCheck = Date.now()
-        } catch {
-          setMessage('Failed to load API keys. Retrying in 10s...', 'error')
-          btn.textContent = 'Retrying...'
-          btn.disabled = true
-          setTimeout(fetchKeys, 10000)
+          const res = await fetch('https://raw.githubusercontent.com/RealMaybecool/Luartor/refs/heads/main/apikey.json', {cache: 'no-store'});
+          const data = await res.json();
+          validKeys = data;
+        } catch (e) {
+          setStatus('Error fetching keys.', 'error');
         }
-      }
-      function enableOrDisableBtn() {
-        btn.disabled = loading || !validateFormat(input.value.trim())
-      }
-      btn.onclick = () => {
-        const val = input.value.trim()
-        if(!validateFormat(val)) {
-          setMessage('Invalid key format. Must be 32 alphanumeric chars.', 'error')
-          return
-        }
-        if(!keys || Object.keys(keys).length===0) {
-          setMessage('API keys not loaded yet.', 'error')
-          return
-        }
-        if(keys.hasOwnProperty(val)) {
-          setMessage(`✅ Valid key! Company: ${keys[val]}`, 'success')
-          btn.disabled = true
-          input.disabled = true
-          clearInterval(refreshTimer)
-        } else {
-          setMessage('❌ Invalid API key.', 'error')
-        }
-      }
-      input.addEventListener('input', () => {
-        clearMessage()
-        enableOrDisableBtn()
-      })
-      input.addEventListener('keyup', e => {
-        if(e.key==='Enter' && !btn.disabled) btn.click()
-      })
+      };
 
-      fetchKeys()
-      const refreshTimer = setInterval(() => {
-        if(Date.now() - lastCheck >= refreshInterval) fetchKeys()
-      }, 15000)
+      const validateKey = (key) => {
+        return key.length === 32 && Object.keys(validKeys).includes(key.toLowerCase());
+      };
 
-    })()
+      const getCompany = (key) => {
+        return validKeys[key.toLowerCase()] || 'default';
+      };
+
+      apikeyInput.addEventListener('input', () => {
+        const key = apikeyInput.value.trim();
+        enableButton(key.length === 32);
+        statusEl.textContent = '';
+      });
+
+      loginBtn.addEventListener('click', () => {
+        const key = apikeyInput.value.trim();
+        if (!validateKey(key)) {
+          setStatus('Invalid key.', 'error');
+          return;
+        }
+        setStatus('Access granted. Redirecting...', 'success');
+        loginBtn.disabled = true;
+        setTimeout(() => {
+          const company = getCompany(key);
+          window.location.href = `dashboard.html?company=${encodeURIComponent(company)}&key=${encodeURIComponent(key)}`;
+        }, 1200);
+      });
+
+      fetchKeys();
+      setInterval(fetchKeys, 60000);
+    })();
   </script>
 </body>
-</html>
+</html>z
