@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luartor Advanced Key Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #6366f1;
+  --secondary: #06b6d4;
+  --accent: #f59e0b;
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --dark: #0f172a;
+  --light: #f8fafc;
+  --bg-card: rgba(15, 23, 42, 0.95);
+  --bg-gradient: linear-gradient(135deg, #1e1e2f 0%, #343456 50%, #2d1b69 100%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-gradient);
+  color: var(--light);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo {
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--secondary), var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  text-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: var(--secondary);
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 1rem;
+  color: rgba(248, 250, 252, 0.8);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--light);
+  font-size: 0.95rem;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--light);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.checkbox-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--secondary);
+}
+
+.checkbox-item label {
+  margin: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-success {
+  background: var(--success);
+  color: white;
+}
+
+.btn-warning {
+  background: var(--warning);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-full {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.output-section {
+  grid-column: 1 / -1;
+}
+
+.key-output {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.key-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.key-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(5px);
+}
+
+.key-text {
+  flex: 1;
+  word-break: break-all;
+  margin-right: 15px;
+}
+
+.key-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+}
+
+.stats-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--secondary);
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: rgba(248, 250, 252, 0.7);
+  margin-top: 2px;
+}
+
+.algorithm-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.algorithm-card {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.algorithm-card.selected {
+  border-color: var(--secondary);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.algorithm-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.algorithm-name {
+  font-weight: 600;
+  color: var(--light);
+  margin-bottom: 5px;
+}
+
+.algorithm-desc {
+  font-size: 0.8rem;
+  color: rgba(248, 250, 252, 0.7);
+}
+
+.progress-container {
+  margin: 20px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.8);
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 25px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  z-index: 1000;
+  transform: translateX(400px);
+  transition: transform 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification.success {
+  background: var(--success);
+}
+
+.notification.error {
+  background: var(--error);
+}
+
+.notification.warning {
+  background: var(--warning);
+}
+
+.floating-stats {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.floating-stats h4 {
+  color: var(--primary);
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.floating-stats .stat {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .algorithm-selector {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-bar {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .floating-stats {
+    position: static;
+    margin-top: 20px;
+  }
+}
+
+.entropy-meter {
+  margin: 15px 0;
+}
+
+.entropy-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.entropy-fill {
+  height: 100%;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.entropy-low {
+  background: var(--error);
+}
+
+.entropy-medium {
+  background: var(--warning);
+}
+
+.entropy-high {
+  background: var(--success);
+}
+
+.entropy-label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: rgba(248, 250, 252, 0.7);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">LUARTOR</div>
+    <div class="subtitle">Advanced Key Generator</div>
+    <div class="description">
+      Professional-grade key generation system with multiple algorithms, 
+      entropy analysis, and advanced customization options for maximum security.
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-number" id="totalGenerated">0</span>
+      <span class="stat-label">Total Generated</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number" id="sessionKeys">0</span>
+      <span class="stat-label">Session Keys</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number" id="avgEntropy">0</span>
+      <span class="stat-label">Avg Entropy</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number" id="uniqueKeys">100%</span>
+      <span class="stat-label">Uniqueness</span>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="card">
+      <div class="card-title">🔧 Generator Configuration</div>
+      
+      <div class="input-group">
+        <label>Key Length</label>
+        <input type="range" id="keyLength" min="4" max="64" value="16" oninput="updateLengthDisplay()">
+        <div style="text-align: center; margin-top: 5px;">
+          <span id="lengthDisplay">16</span> characters
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Number of Keys</label>
+        <input type="number" id="keyCount" value="10" min="1" max="10000">
+      </div>
+
+      <div class="input-group">
+        <label>Key Prefix (Optional)</label>
+        <input type="text" id="keyPrefix" placeholder="e.g., LUA_" maxlength="10">
+      </div>
+
+      <div class="input-group">
+        <label>Key Suffix (Optional)</label>
+        <input type="text" id="keySuffix" placeholder="e.g., _2024" maxlength="10">
+      </div>
+
+      <div class="checkbox-grid">
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeUppercase" checked>
+          <label for="includeUppercase">Uppercase (A-Z)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeLowercase" checked>
+          <label for="includeLowercase">Lowercase (a-z)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeNumbers" checked>
+          <label for="includeNumbers">Numbers (0-9)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeSpecial">
+          <label for="includeSpecial">Special (!@#$%)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="excludeSimilar" checked>
+          <label for="excludeSimilar">Exclude Similar (0,O,l,1)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="ensureUnique" checked>
+          <label for="ensureUnique">Ensure Uniqueness</label>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="generateKeys()">
+        🚀 Generate Keys
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🧮 Algorithm Selection</div>
+      
+      <div class="algorithm-selector">
+        <div class="algorithm-card selected" data-algorithm="secure">
+          <div class="algorithm-name">Secure Random</div>
+          <div class="algorithm-desc">Cryptographically secure</div>
+        </div>
+        <div class="algorithm-card" data-algorithm="pseudo">
+          <div class="algorithm-name">Pseudo Random</div>
+          <div class="algorithm-desc">Fast generation</div>
+        </div>
+        <div class="algorithm-card" data-algorithm="pattern">
+          <div class="algorithm-name">Pattern Based</div>
+          <div class="algorithm-desc">Structured keys</div>
+        </div>
+        <div class="algorithm-card" data-algorithm="hybrid">
+          <div class="algorithm-name">Hybrid</div>
+          <div class="algorithm-desc">Best of all methods</div>
+        </div>
+      </div>
+
+      <div class="entropy-meter">
+        <div class="entropy-bar">
+          <div class="entropy-fill entropy-high" id="entropyFill" style="width: 85%"></div>
+        </div>
+        <div class="entropy-label">
+          <span>Entropy Level</span>
+          <span id="entropyValue">85%</span>
+        </div>
+      </div>
+
+      <div class="progress-container" id="progressContainer" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Generating keys...</div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="previewKey()">👁️ Preview</button>
+        <button class="btn btn-warning" onclick="testEntropy()">🔍 Test Entropy</button>
+      </div>
+    </div>
+
+    <div class="card output-section">
+      <div class="card-title">📋 Generated Keys</div>
+      
+      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button class="btn btn-success" onclick="exportKeys()">💾 Export</button>
+        <button class="btn btn-secondary" onclick="copyAllKeys()">📋 Copy All</button>
+        <button class="btn btn-warning" onclick="clearKeys()">🗑️ Clear</button>
+        <button class="btn btn-secondary" onclick="analyzeKeys()">📊 Analyze</button>
+      </div>
+
+      <div class="key-output" id="keyOutput">
+        <div style="text-align: center; opacity: 0.6; padding: 40px;">
+          No keys generated yet. Click "Generate Keys" to start.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="floating-stats">
+  <h4>Session Statistics</h4>
+  <div class="stat">
+    <span>Keys Generated:</span>
+    <span id="floatingGenerated">0</span>
+  </div>
+  <div class="stat">
+    <span>Unique Rate:</span>
+    <span id="floatingUnique">100%</span>
+  </div>
+  <div class="stat">
+    <span>Avg Length:</span>
+    <span id="floatingLength">16</span>
+  </div>
+  <div class="stat">
+    <span>Algorithm:</span>
+    <span id="floatingAlgorithm">Secure</span>
+  </div>
+</div>
+
+<div id="notification" class="notification"></div>
+
+<script>
+class AdvancedKeyGenerator {
+  constructor() {
+    this.generatedKeys = [];
+    this.sessionStats = {
+      totalGenerated: 0,
+      sessionKeys: 0,
+      algorithms: {},
+      entropy: []
+    };
+    this.selectedAlgorithm = 'secure';
+    this.init();
+  }
+
+  init() {
+    this.setupEventListeners();
+    this.updateStats();
+    this.calculateEntropy();
+  }
+
+  setupEventListeners() {
+    document.querySelectorAll('.algorithm-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.algorithm-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        this.selectedAlgorithm = card.dataset.algorithm;
+        this.updateFloatingStats();
+        this.calculateEntropy();
+      });
+    });
+
+    document.querySelectorAll('input[type="checkbox"], input[type="number"], input[type="range"], input[type="text"]').forEach(input => {
+      input.addEventListener('change', () => this.calculateEntropy());
+    });
+  }
+
+  generateKeys() {
+    const count = parseInt(document.getElementById('keyCount').value);
+    const length = parseInt(document.getElementById('keyLength').value);
+    const prefix = document.getElementById('keyPrefix').value;
+    const suffix = document.getElementById('keySuffix').value;
+
+    if (count > 1000) {
+      this.showNotification('Maximum 1000 keys per generation', 'warning');
+      return;
+    }
+
+    this.showProgress(true);
+    this.generatedKeys = [];
+
+    const options = this.getGenerationOptions();
+    
+    setTimeout(() => {
+      for (let i = 0; i < count; i++) {
+        const key = this.generateSingleKey(length, options, prefix, suffix);
+        this.generatedKeys.push({
+          id: this.generateId(),
+          key: key,
+          algorithm: this.selectedAlgorithm,
+          entropy: this.calculateKeyEntropy(key),
+          timestamp: new Date().toISOString()
+        });
+
+        if (i % 10 === 0) {
+          this.updateProgress((i / count) * 100);
+        }
+      }
+
+      this.sessionStats.totalGenerated += count;
+      this.sessionStats.sessionKeys += count;
+      this.sessionStats.algorithms[this.selectedAlgorithm] = (this.sessionStats.algorithms[this.selectedAlgorithm] || 0) + count;
+
+      this.showProgress(false);
+      this.renderKeys();
+      this.updateStats();
+      this.showNotification(`Generated ${count} keys successfully!`, 'success');
+    }, 100);
+  }
+
+  generateSingleKey(length, options, prefix = '', suffix = '') {
+    const coreLength = length - prefix.length - suffix.length;
+    let key = '';
+
+    switch (this.selectedAlgorithm) {
+      case 'secure':
+        key = this.generateSecureKey(coreLength, options);
+        break;
+      case 'pseudo':
+        key = this.generatePseudoKey(coreLength, options);
+        break;
+      case 'pattern':
+        key = this.generatePatternKey(coreLength, options);
+        break;
+      case 'hybrid':
+        key = this.generateHybridKey(coreLength, options);
+        break;
+      default:
+        key = this.generateSecureKey(coreLength, options);
+    }
+
+    return prefix + key + suffix;
+  }
+
+  generateSecureKey(length, options) {
+    const charset = this.buildCharset(options);
+    const array = new Uint8Array(length);
+    crypto.getRandomValues(array);
+    
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += charset[array[i] % charset.length];
+    }
+    
+    return this.ensureComplexity(result, options);
+  }
+
+  generatePseudoKey(length, options) {
+    const charset = this.buildCharset(options);
+    let result = '';
+    
+    for (let i = 0; i < length; i++) {
+      result += charset[Math.floor(Math.random() * charset.length)];
+    }
+    
+    return this.ensureComplexity(result, options);
+  }
+
+  generatePatternKey(length, options) {
+    const patterns = ['ULNL', 'LUNU', 'NLUL', 'UNLN'];
+    const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+    let result = '';
+    
+    const charsets = {
+      U: options.includeUppercase ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : '',
+      L: options.includeLowercase ? 'abcdefghijklmnopqrstuvwxyz' : '',
+      N: options.includeNumbers ? '0123456789' : '',
+      S: options.includeSpecial ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''
+    };
+
+    for (let i = 0; i < length; i++) {
+      const patternChar = pattern[i % pattern.length];
+      const charset = charsets[patternChar] || this.buildCharset(options);
+      if (charset) {
+        result += charset[Math.floor(Math.random() * charset.length)];
+      }
+    }
+    
+    return result || this.generateSecureKey(length, options);
+  }
+
+  generateHybridKey(length, options) {
+    const methods = ['secure', 'pseudo', 'pattern'];
+    const method = methods[Math.floor(Math.random() * methods.length)];
+    
+    switch (method) {
+      case 'secure':
+        return this.generateSecureKey(length, options);
+      case 'pseudo':
+        return this.generatePseudoKey(length, options);
+      case 'pattern':
+        return this.generatePatternKey(length, options);
+      default:
+        return this.generateSecureKey(length, options);
+    }
+  }
+
+  buildCharset(options) {
+    let charset = '';
+    
+    if (options.includeUppercase) {
+      charset += options.excludeSimilar ? 'ABCDEFGHJKMNPQRSTUVWXYZ' : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    }
+    if (options.includeLowercase) {
+      charset += options.excludeSimilar ? 'abcdefghijkmnpqrstuvwxyz' : 'abcdefghijklmnopqrstuvwxyz';
+    }
+    if (options.includeNumbers) {
+      charset += options.excludeSimilar ? '23456789' : '0123456789';
+    }
+    if (options.includeSpecial) {
+      charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    }
+    
+    return charset || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  }
+
+  ensureComplexity(key, options) {
+    const requirements = [];
+    if (options.includeUppercase) requirements.push(/[A-Z]/);
+    if (options.includeLowercase) requirements.push(/[a-z]/);
+    if (options.includeNumbers) requirements.push(/[0-9]/);
+    if (options.includeSpecial) requirements.push(/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/);
+
+    const missingRequirements = requirements.filter(req => !req.test(key));
+    
+    if (missingRequirements.length > 0 && key.length > missingRequirements.length) {
+      let modifiedKey = key.split('');
+      const charset = this.buildCharset(options);
+      
+      missingRequirements.forEach((req, index) => {
+        if (index < modifiedKey.length) {
+          let char;
+          do {
+            char = charset[Math.floor(Math.random() * charset.length)];
+          } while (!req.test(char));
+          modifiedKey[index] = char;
+        }
+      });
+      
+      return modifiedKey.join('');
+    }
+    
+    return key;
+  }
+
+  getGenerationOptions() {
+    return {
+      includeUppercase: document.getElementById('includeUppercase').checked,
+      includeLowercase: document.getElementById('includeLowercase').checked,
+      includeNumbers: document.getElementById('includeNumbers').checked,
+      includeSpecial: document.getElementById('includeSpecial').checked,
+      excludeSimilar: document.getElementById('excludeSimilar').checked,
+      ensureUnique: document.getElementById('ensureUnique').checked
+    };
+  }
+
+  calculateKeyEntropy(key) {
+    const charset = new Set(key).size;
+    const length = key.length;
+    return Math.log2(Math.pow(charset, length));
+  }
+
+  calculateEntropy() {
+    const length = parseInt(document.getElementById('keyLength').value);
+    const options = this.getGenerationOptions();
+    const charset = this.buildCharset(options);
+    
+    const entropy = Math.log2(Math.pow(charset.length, length));
+    const maxEntropy = Math.log2(Math.pow(95, length));
+    const percentage = Math.min((entropy / maxEntropy) * 100, 100);
+    
+    const entropyFill = document.getElementById('entropyFill');
+    const entropyValue = document.getElementById('entropyValue');
+    
+    entropyFill.style.width = percentage + '%';
+    entropyValue.textContent = Math.round(percentage) + '%';
+    
+    if (percentage < 50) {
+      entropyFill.className = 'entropy-fill entropy-low';
+    } else if (percentage < 80) {
+      entropyFill.className = 'entropy-fill entropy-medium';
+    } else {
+      entropyFill.className = 'entropy-fill entropy-high';
+    }
+  }
+
+  renderKeys() {
+    const container = document.getElementById('keyOutput');
+    
+    if (this.generatedKeys.length === 0) {
+      container.innerHTML = '<div style="text-align: center; opacity: 0.6; padding: 40px;">No keys generated yet. Click "Generate Keys" to start.</div>';
+      return;
+    }
+
+    container.innerHTML = this.generatedKeys.map((keyObj, index) => `
+      <div class="key-item">
+        <div class="key-text">${keyObj.key}</div>
+        <div class="key-actions">
+          <button class="btn btn-small btn-secondary" onclick="keyGen.copyKey('${keyObj.key}')">Copy</button>
+          <button class="btn btn-small btn-warning" onclick="keyGen.analyzeKey('${keyObj.key}')">Info</button>
+          <button class="btn btn-small btn-error" onclick="keyGen.removeKey(${index})">Remove</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  copyKey(key) {
+    navigator.clipboard.writeText(key).then(() => {
+      this.showNotification('Key copied to clipboard!', 'success');
+    }).catch(() => {
+      this.showNotification('Failed to copy key!', 'error');
+    });
+  }
+
+  copyAllKeys() {
+    const keys = this.generatedKeys.map(k => k.key).join('\n');
+    navigator.clipboard.writeText(keys).then(() => {
+      this.showNotification('All keys copied to clipboard!', 'success');
+    }).catch(() => {
+      this.showNotification('Failed to copy keys!', 'error');
+    });
+  }
+
+  removeKey(index) {
+    this.generatedKeys.splice(index, 1);
+    this.renderKeys();
+    this.updateStats();
+    this.showNotification('Key removed!', 'success');
+  }
+
+  analyzeKey(key) {
+    const entropy = this.calculateKeyEntropy(key);
+    const length = key.length;
+    const charset = new Set(key).size;
+    
+    const analysis = `
+Key Analysis:
+- Length: ${length} characters
+- Unique characters: ${charset}
+- Entropy: ${entropy.toFixed(2)} bits
+- Strength: ${entropy > 60 ? 'Strong' : entropy > 40 ? 'Medium' : 'Weak'}
+- Character types: ${this.analyzeCharTypes(key)}
+    `;
+    
+    alert(analysis);
+  }
+
+  analyzeCharTypes(key) {
+    const types = [];
+    if (/[A-Z]/.test(key)) types.push('Uppercase');
+    if (/[a-z]/.test(key)) types.push('Lowercase');
+    if (/[0-9]/.test(key)) types.push('Numbers');
+    if (/[^A-Za-z0-9]/.test(key)) types.push('Special');
+    return types.join(', ');
+  }
+
+  exportKeys() {
+    const data = {
+      keys: this.generatedKeys,
+      metadata: {
+        generated: new Date().toISOString(),
+        algorithm: this.selectedAlgorithm,
+        count: this.generatedKeys.length,
+        sessionStats: this.sessionStats
+      }
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `luartor_keys_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    this.showNotification('Keys exported successfully!', 'success');
+  }
+
+  clearKeys() {
+    if (confirm('Are you sure you want to clear all generated keys?')) {
+      this.generatedKeys = [];
+      this.renderKeys();
+      this.updateStats();
+      this.showNotification('All keys cleared!', 'warning');
+    }
+  }
+
+  previewKey() {
+    const length = parseInt(document.getElementById('keyLength').value);
+    const options = this.getGenerationOptions();
+    const prefix = document.getElementById('keyPrefix').value;
+    const suffix = document.getElementById('keySuffix').value;
+    
+    const previewKey = this.generateSingleKey(length, options, prefix, suffix);
+    this.showNotification(`Preview: ${previewKey}`, 'success');
+  }
+
+  testEntropy() {
+    const length = parseInt(document.getElementById('keyLength').value);
+    const options = this.getGenerationOptions();
+    const charset = this.buildCharset(options);
+    
+    const entropy = Math.log2(Math.pow(charset.length, length));
+    const timeToBreak = Math.pow(2, entropy - 1) / 1000000000; // Assuming 1 billion attempts per second
+    
+    let timeString;
+    if (timeToBreak < 60) {
+      timeString = `${timeToBreak.toFixed(2)} seconds`;
+    } else if (timeToBreak < 3600) {
+      timeString = `${(timeToBreak / 60).toFixed(2)} minutes`;
+    } else if (timeToBreak < 86400) {
+      timeString = `${(timeToBreak / 3600).toFixed(2)} hours`;
+    } else if (timeToBreak < 31536000) {
+      timeString = `${(timeToBreak / 86400).toFixed(2)} days`;
+    } else {
+      timeString = `${(timeToBreak / 31536000).toExponential(2)} years`;
+    }
+    
+    alert(`Entropy Analysis:
+- Entropy: ${entropy.toFixed(2)} bits
+- Charset size: ${charset.length}
+- Estimated time to break: ${timeString}
+- Security level: ${entropy > 80 ? 'Excellent' : entropy > 60 ? 'Good' : entropy > 40 ? 'Fair' : 'Poor'}`);
+  }
+
+  analyzeKeys() {
+    if (this.generatedKeys.length === 0) {
+      this.showNotification('No keys to analyze!', 'warning');
+      return;
+    }
+
+    const totalKeys = this.generatedKeys.length;
+    const uniqueKeys = new Set(this.generatedKeys.map(k => k.key)).size;
+    const avgEntropy = this.generatedKeys.reduce((sum, k) => sum + k.entropy, 0) / totalKeys;
+    const avgLength = this.generatedKeys.reduce((sum, k) => sum + k.key.length, 0) / totalKeys;
+    
+    const analysis = `
+Key Set Analysis:
+- Total keys: ${totalKeys}
+- Unique keys: ${uniqueKeys} (${((uniqueKeys/totalKeys)*100).toFixed(1)}%)
+- Average entropy: ${avgEntropy.toFixed(2)} bits
+- Average length: ${avgLength.toFixed(1)} characters
+- Algorithm used: ${this.selectedAlgorithm}
+- Duplicates: ${totalKeys - uniqueKeys}
+    `;
+    
+    alert(analysis);
+  }
+
+  updateStats() {
+    document.getElementById('totalGenerated').textContent = this.sessionStats.totalGenerated;
+    document.getElementById('sessionKeys').textContent = this.generatedKeys.length;
+    
+    if (this.generatedKeys.length > 0) {
+      const avgEntropy = this.generatedKeys.reduce((sum, k) => sum + k.entropy, 0) / this.generatedKeys.length;
+      document.getElementById('avgEntropy').textContent = Math.round(avgEntropy);
+      
+      const uniqueKeys = new Set(this.generatedKeys.map(k => k.key)).size;
+      const uniqueRate = ((uniqueKeys / this.generatedKeys.length) * 100).toFixed(1);
+      document.getElementById('uniqueKeys').textContent = uniqueRate + '%';
+    }
+    
+    this.updateFloatingStats();
+  }
+
+  updateFloatingStats() {
+    document.getElementById('floatingGenerated').textContent = this.sessionStats.totalGenerated;
+    document.getElementById('floatingAlgorithm').textContent = this.selectedAlgorithm.charAt(0).toUpperCase() + this.selectedAlgorithm.slice(1);
+    
+    if (this.generatedKeys.length > 0) {
+      const uniqueKeys = new Set(this.generatedKeys.map(k => k.key)).size;
+      const uniqueRate = ((uniqueKeys / this.generatedKeys.length) * 100).toFixed(1);
+      document.getElementById('floatingUnique').textContent = uniqueRate + '%';
+      
+      const avgLength = this.generatedKeys.reduce((sum, k) => sum + k.key.length, 0) / this.generatedKeys.length;
+      document.getElementById('floatingLength').textContent = avgLength.toFixed(1);
+    }
+  }
+
+  showProgress(show) {
+    const container = document.getElementById('progressContainer');
+    container.style.display = show ? 'block' : 'none';
+    
+    if (!show) {
+      document.getElementById('progressFill').style.width = '0%';
+    }
+  }
+
+  updateProgress(percentage) {
+    document.getElementById('progressFill').style.width = percentage + '%';
+    document.getElementById('progressText').textContent = `Generating keys... ${Math.round(percentage)}%`;
+  }
+
+  showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.classList.add('show');
+
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 3000);
+  }
+
+  generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  }
+}
+
+function updateLengthDisplay() {
+  const length = document.getElementById('keyLength').value;
+  document.getElementById('lengthDisplay').textContent = length;
+  keyGen.calculateEntropy();
+}
+
+function generateKeys() {
+  keyGen.generateKeys();
+}
+
+function previewKey() {
+  keyGen.previewKey();
+}
+
+function testEntropy() {
+  keyGen.testEntropy();
+}
+
+function exportKeys() {
+  keyGen.exportKeys();
+}
+
+function copyAllKeys() {
+  keyGen.copyAllKeys();
+}
+
+function clearKeys() {
+  keyGen.clearKeys();
+}
+
+function analyzeKeys() {
+  keyGen.analyzeKeys();
+}
+
+const keyGen = new AdvancedKeyGenerator();
+</script>
+</body>
+</html>
+

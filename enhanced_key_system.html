@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luartor Enhanced Key System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #4f46e5;
+  --secondary: #06b6d4;
+  --accent: #f59e0b;
+  --dark: #0f172a;
+  --light: #f8fafc;
+  --error: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --bg-card: rgba(15, 23, 42, 0.9);
+  --bg-gradient: linear-gradient(135deg, #1e1e2f, #343456, #2d1b69);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-gradient);
+  color: var(--light);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--secondary), var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  text-shadow: 0 0 30px rgba(79, 70, 229, 0.5);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--secondary);
+  font-weight: 400;
+}
+
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.tab-btn.active {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+}
+
+.tab-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger {
+  background: var(--error);
+  color: white;
+}
+
+.btn-success {
+  background: var(--success);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--light);
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--light);
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+.key-display {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  word-break: break-all;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.key-list {
+  max-height: 400px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.key-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+}
+
+.key-item:last-child {
+  margin-bottom: 0;
+}
+
+.key-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-small {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  color: var(--light);
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.3s ease;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  z-index: 1000;
+  transform: translateX(400px);
+  transition: transform 0.3s ease;
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification.success {
+  background: var(--success);
+}
+
+.notification.error {
+  background: var(--error);
+}
+
+.notification.warning {
+  background: var(--warning);
+}
+
+.floating-action {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+  transition: all 0.3s ease;
+}
+
+.floating-action:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(79, 70, 229, 0.6);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--light);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .logo {
+    font-size: 2rem;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tab-btn {
+    width: 200px;
+  }
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.api-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.api-status.active {
+  background: var(--success);
+  color: white;
+}
+
+.api-status.inactive {
+  background: var(--error);
+  color: white;
+}
+
+.search-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  padding-left: 40px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">LUARTOR</div>
+    <div class="subtitle">Enhanced Key Management System</div>
+  </header>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('generator')">Key Generator</button>
+    <button class="tab-btn" onclick="switchTab('manager')">Key Manager</button>
+    <button class="tab-btn" onclick="switchTab('api')">API Keys</button>
+    <button class="tab-btn" onclick="switchTab('scripts')">Scripts</button>
+    <button class="tab-btn" onclick="switchTab('analytics')">Analytics</button>
+  </nav>
+
+  <div id="dashboard" class="tab-content active">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="totalKeys">0</div>
+        <div class="stat-label">Total Keys</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="activeKeys">0</div>
+        <div class="stat-label">Active Keys</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="usedKeys">0</div>
+        <div class="stat-label">Used Keys</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="apiCount">0</div>
+        <div class="stat-label">API Endpoints</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Quick Actions</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+          <button class="btn btn-primary" onclick="generateRandomKeys(10)">Generate 10 Random Keys</button>
+          <button class="btn btn-secondary" onclick="exportAllKeys()">Export All Keys</button>
+          <button class="btn btn-secondary" onclick="importKeys()">Import Keys</button>
+          <button class="btn btn-danger" onclick="clearAllKeys()">Clear All Keys</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">System Status</div>
+        </div>
+        <div>
+          <div style="margin-bottom: 15px;">
+            <span>Key Generation: </span>
+            <span class="api-status active">Active</span>
+          </div>
+          <div style="margin-bottom: 15px;">
+            <span>API Validation: </span>
+            <span class="api-status active">Active</span>
+          </div>
+          <div style="margin-bottom: 15px;">
+            <span>Storage: </span>
+            <span class="api-status active">LocalStorage</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 85%"></div>
+          </div>
+          <small>System Health: 85%</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="generator" class="tab-content">
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Key Generator</div>
+        </div>
+        <div class="input-group">
+          <label>Key Length</label>
+          <select id="keyLength">
+            <option value="8">8 characters</option>
+            <option value="12">12 characters</option>
+            <option value="16" selected>16 characters</option>
+            <option value="20">20 characters</option>
+            <option value="24">24 characters</option>
+            <option value="32">32 characters</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Number of Keys</label>
+          <input type="number" id="keyCount" value="1" min="1" max="1000">
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeNumbers" checked>
+          <label for="includeNumbers">Include Numbers</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeUppercase" checked>
+          <label for="includeUppercase">Include Uppercase</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeLowercase" checked>
+          <label for="includeLowercase">Include Lowercase</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="includeSpecial">
+          <label for="includeSpecial">Include Special Characters</label>
+        </div>
+        <button class="btn btn-primary" onclick="generateCustomKeys()">Generate Keys</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Generated Keys</div>
+        </div>
+        <div id="generatedKeys" class="key-list">
+          <p style="text-align: center; opacity: 0.6;">No keys generated yet</p>
+        </div>
+        <button class="btn btn-secondary" onclick="saveGeneratedKeys()">Save All Keys</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="manager" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Key Management</div>
+      </div>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="keySearch" placeholder="Search keys..." oninput="filterKeys()">
+      </div>
+      <div id="keyList" class="key-list">
+        <p style="text-align: center; opacity: 0.6;">No keys available</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="api" class="tab-content">
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">API Key Management</div>
+        </div>
+        <div class="input-group">
+          <label>API Key</label>
+          <input type="text" id="newApiKey" placeholder="Enter API key">
+        </div>
+        <div class="input-group">
+          <label>Service Name</label>
+          <input type="text" id="serviceName" placeholder="Enter service name">
+        </div>
+        <button class="btn btn-primary" onclick="addApiKey()">Add API Key</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Current API Keys</div>
+        </div>
+        <div id="apiKeyList" class="key-list">
+          <p style="text-align: center; opacity: 0.6;">No API keys configured</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="scripts" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Script Management</div>
+      </div>
+      <div class="input-group">
+        <label>Script Name</label>
+        <input type="text" id="scriptName" placeholder="Enter script name">
+      </div>
+      <div class="input-group">
+        <label>Script Content</label>
+        <textarea id="scriptContent" rows="10" placeholder="Paste your Lua script here..."></textarea>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="enableKeySystem">
+        <label for="enableKeySystem">Enable Key System</label>
+      </div>
+      <button class="btn btn-primary" onclick="saveScript()">Save Script</button>
+    </div>
+  </div>
+
+  <div id="analytics" class="tab-content">
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Usage Analytics</div>
+        </div>
+        <div id="analyticsChart" style="height: 300px; display: flex; align-items: center; justify-content: center; opacity: 0.6;">
+          Analytics data will be displayed here
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Recent Activity</div>
+        </div>
+        <div id="activityLog" class="key-list">
+          <p style="text-align: center; opacity: 0.6;">No recent activity</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="floating-action" onclick="showQuickActions()" title="Quick Actions">⚡</button>
+
+<div id="quickModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Quick Actions</div>
+      <button class="close-btn" onclick="closeModal('quickModal')">&times;</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+      <button class="btn btn-primary" onclick="generateRandomKeys(5); closeModal('quickModal')">Generate 5 Keys</button>
+      <button class="btn btn-secondary" onclick="backupData(); closeModal('quickModal')">Backup Data</button>
+      <button class="btn btn-secondary" onclick="restoreData(); closeModal('quickModal')">Restore Data</button>
+    </div>
+  </div>
+</div>
+
+<div id="notification" class="notification"></div>
+
+<script>
+class LuartorKeySystem {
+  constructor() {
+    this.keys = this.loadKeys();
+    this.apiKeys = this.loadApiKeys();
+    this.scripts = this.loadScripts();
+    this.generatedKeys = [];
+    this.activityLog = this.loadActivityLog();
+    this.init();
+  }
+
+  init() {
+    this.updateDashboard();
+    this.renderKeyList();
+    this.renderApiKeyList();
+    this.renderActivityLog();
+    this.logActivity('System initialized');
+  }
+
+  loadKeys() {
+    const stored = localStorage.getItem('luartor_keys');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        console.error('Error loading keys:', e);
+      }
+    }
+    return this.getDefaultKeys();
+  }
+
+  getDefaultKeys() {
+    return [
+      { id: this.generateId(), key: 'VV6mDxjBQ0RLWHtd', status: 'active', created: new Date().toISOString(), used: false },
+      { id: this.generateId(), key: 'SgUZAfdLif', status: 'active', created: new Date().toISOString(), used: false },
+      { id: this.generateId(), key: 'PgiHJ2h1co6q', status: 'active', created: new Date().toISOString(), used: false },
+      { id: this.generateId(), key: 'JSONpOEg1Frh6I5Y', status: 'active', created: new Date().toISOString(), used: false },
+      { id: this.generateId(), key: 'CwvFWms2fbJXFTST', status: 'active', created: new Date().toISOString(), used: false }
+    ];
+  }
+
+  loadApiKeys() {
+    const stored = localStorage.getItem('luartor_api_keys');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        console.error('Error loading API keys:', e);
+      }
+    }
+    return {
+      '9559C4FF014C1CBE0ABC2E7E78106EEC': 'Eclipse',
+      'BE97E30370BC89D7DFECC46D856B3F9E': 'Sapphire'
+    };
+  }
+
+  loadScripts() {
+    const stored = localStorage.getItem('luartor_scripts');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        console.error('Error loading scripts:', e);
+      }
+    }
+    return [];
+  }
+
+  loadActivityLog() {
+    const stored = localStorage.getItem('luartor_activity');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        console.error('Error loading activity log:', e);
+      }
+    }
+    return [];
+  }
+
+  saveKeys() {
+    localStorage.setItem('luartor_keys', JSON.stringify(this.keys));
+  }
+
+  saveApiKeys() {
+    localStorage.setItem('luartor_api_keys', JSON.stringify(this.apiKeys));
+  }
+
+  saveScripts() {
+    localStorage.setItem('luartor_scripts', JSON.stringify(this.scripts));
+  }
+
+  saveActivityLog() {
+    localStorage.setItem('luartor_activity', JSON.stringify(this.activityLog));
+  }
+
+  generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  }
+
+  generateRandomKey(length = 16, options = {}) {
+    const {
+      includeNumbers = true,
+      includeUppercase = true,
+      includeLowercase = true,
+      includeSpecial = false
+    } = options;
+
+    let charset = '';
+    if (includeNumbers) charset += '0123456789';
+    if (includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (includeLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
+    if (includeSpecial) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+    if (!charset) charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    return result;
+  }
+
+  generateCustomKeys() {
+    const length = parseInt(document.getElementById('keyLength').value);
+    const count = parseInt(document.getElementById('keyCount').value);
+    const options = {
+      includeNumbers: document.getElementById('includeNumbers').checked,
+      includeUppercase: document.getElementById('includeUppercase').checked,
+      includeLowercase: document.getElementById('includeLowercase').checked,
+      includeSpecial: document.getElementById('includeSpecial').checked
+    };
+
+    this.generatedKeys = [];
+    for (let i = 0; i < count; i++) {
+      this.generatedKeys.push(this.generateRandomKey(length, options));
+    }
+
+    this.renderGeneratedKeys();
+    this.logActivity(`Generated ${count} custom keys`);
+    this.showNotification(`Generated ${count} keys successfully!`, 'success');
+  }
+
+  generateRandomKeys(count) {
+    for (let i = 0; i < count; i++) {
+      const key = this.generateRandomKey(16);
+      this.keys.push({
+        id: this.generateId(),
+        key: key,
+        status: 'active',
+        created: new Date().toISOString(),
+        used: false
+      });
+    }
+    this.saveKeys();
+    this.updateDashboard();
+    this.renderKeyList();
+    this.logActivity(`Generated ${count} random keys`);
+    this.showNotification(`Generated ${count} random keys!`, 'success');
+  }
+
+  renderGeneratedKeys() {
+    const container = document.getElementById('generatedKeys');
+    if (this.generatedKeys.length === 0) {
+      container.innerHTML = '<p style="text-align: center; opacity: 0.6;">No keys generated yet</p>';
+      return;
+    }
+
+    container.innerHTML = this.generatedKeys.map(key => `
+      <div class="key-item">
+        <span>${key}</span>
+        <div class="key-actions">
+          <button class="btn btn-small btn-secondary" onclick="copyToClipboard('${key}')">Copy</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  saveGeneratedKeys() {
+    this.generatedKeys.forEach(key => {
+      this.keys.push({
+        id: this.generateId(),
+        key: key,
+        status: 'active',
+        created: new Date().toISOString(),
+        used: false
+      });
+    });
+    this.saveKeys();
+    this.generatedKeys = [];
+    this.renderGeneratedKeys();
+    this.updateDashboard();
+    this.renderKeyList();
+    this.logActivity('Saved generated keys to storage');
+    this.showNotification('Keys saved successfully!', 'success');
+  }
+
+  renderKeyList() {
+    const container = document.getElementById('keyList');
+    if (this.keys.length === 0) {
+      container.innerHTML = '<p style="text-align: center; opacity: 0.6;">No keys available</p>';
+      return;
+    }
+
+    const searchTerm = document.getElementById('keySearch')?.value.toLowerCase() || '';
+    const filteredKeys = this.keys.filter(keyObj => 
+      keyObj.key.toLowerCase().includes(searchTerm) ||
+      keyObj.status.toLowerCase().includes(searchTerm)
+    );
+
+    container.innerHTML = filteredKeys.map(keyObj => `
+      <div class="key-item">
+        <div>
+          <div>${keyObj.key}</div>
+          <small style="opacity: 0.7;">Status: ${keyObj.status} | Created: ${new Date(keyObj.created).toLocaleDateString()}</small>
+        </div>
+        <div class="key-actions">
+          <button class="btn btn-small btn-secondary" onclick="copyToClipboard('${keyObj.key}')">Copy</button>
+          <button class="btn btn-small ${keyObj.used ? 'btn-secondary' : 'btn-success'}" onclick="keySystem.toggleKeyUsage('${keyObj.id}')">
+            ${keyObj.used ? 'Mark Unused' : 'Mark Used'}
+          </button>
+          <button class="btn btn-small btn-danger" onclick="keySystem.deleteKey('${keyObj.id}')">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  renderApiKeyList() {
+    const container = document.getElementById('apiKeyList');
+    const apiKeyEntries = Object.entries(this.apiKeys);
+    
+    if (apiKeyEntries.length === 0) {
+      container.innerHTML = '<p style="text-align: center; opacity: 0.6;">No API keys configured</p>';
+      return;
+    }
+
+    container.innerHTML = apiKeyEntries.map(([key, service]) => `
+      <div class="key-item">
+        <div>
+          <div>${service}</div>
+          <small style="opacity: 0.7;">${key}</small>
+        </div>
+        <div class="key-actions">
+          <button class="btn btn-small btn-secondary" onclick="copyToClipboard('${key}')">Copy</button>
+          <button class="btn btn-small btn-danger" onclick="keySystem.deleteApiKey('${key}')">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  renderActivityLog() {
+    const container = document.getElementById('activityLog');
+    if (this.activityLog.length === 0) {
+      container.innerHTML = '<p style="text-align: center; opacity: 0.6;">No recent activity</p>';
+      return;
+    }
+
+    const recentActivity = this.activityLog.slice(-10).reverse();
+    container.innerHTML = recentActivity.map(activity => `
+      <div class="key-item">
+        <div>
+          <div>${activity.action}</div>
+          <small style="opacity: 0.7;">${new Date(activity.timestamp).toLocaleString()}</small>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  toggleKeyUsage(keyId) {
+    const keyObj = this.keys.find(k => k.id === keyId);
+    if (keyObj) {
+      keyObj.used = !keyObj.used;
+      this.saveKeys();
+      this.renderKeyList();
+      this.updateDashboard();
+      this.logActivity(`Key ${keyObj.used ? 'marked as used' : 'marked as unused'}: ${keyObj.key}`);
+    }
+  }
+
+  deleteKey(keyId) {
+    if (confirm('Are you sure you want to delete this key?')) {
+      const keyIndex = this.keys.findIndex(k => k.id === keyId);
+      if (keyIndex !== -1) {
+        const deletedKey = this.keys.splice(keyIndex, 1)[0];
+        this.saveKeys();
+        this.renderKeyList();
+        this.updateDashboard();
+        this.logActivity(`Deleted key: ${deletedKey.key}`);
+        this.showNotification('Key deleted successfully!', 'success');
+      }
+    }
+  }
+
+  addApiKey() {
+    const apiKey = document.getElementById('newApiKey').value.trim();
+    const serviceName = document.getElementById('serviceName').value.trim();
+
+    if (!apiKey || !serviceName) {
+      this.showNotification('Please enter both API key and service name!', 'error');
+      return;
+    }
+
+    this.apiKeys[apiKey] = serviceName;
+    this.saveApiKeys();
+    this.renderApiKeyList();
+    this.updateDashboard();
+    this.logActivity(`Added API key for service: ${serviceName}`);
+    this.showNotification('API key added successfully!', 'success');
+
+    document.getElementById('newApiKey').value = '';
+    document.getElementById('serviceName').value = '';
+  }
+
+  deleteApiKey(apiKey) {
+    if (confirm('Are you sure you want to delete this API key?')) {
+      const serviceName = this.apiKeys[apiKey];
+      delete this.apiKeys[apiKey];
+      this.saveApiKeys();
+      this.renderApiKeyList();
+      this.updateDashboard();
+      this.logActivity(`Deleted API key for service: ${serviceName}`);
+      this.showNotification('API key deleted successfully!', 'success');
+    }
+  }
+
+  saveScript() {
+    const name = document.getElementById('scriptName').value.trim();
+    const content = document.getElementById('scriptContent').value.trim();
+    const keySystemEnabled = document.getElementById('enableKeySystem').checked;
+
+    if (!name || !content) {
+      this.showNotification('Please enter both script name and content!', 'error');
+      return;
+    }
+
+    const script = {
+      id: this.generateId(),
+      name: name,
+      content: content,
+      keySystemEnabled: keySystemEnabled,
+      created: new Date().toISOString()
+    };
+
+    this.scripts.push(script);
+    this.saveScripts();
+    this.logActivity(`Saved script: ${name}`);
+    this.showNotification('Script saved successfully!', 'success');
+
+    document.getElementById('scriptName').value = '';
+    document.getElementById('scriptContent').value = '';
+    document.getElementById('enableKeySystem').checked = false;
+  }
+
+  filterKeys() {
+    this.renderKeyList();
+  }
+
+  exportAllKeys() {
+    const data = {
+      keys: this.keys,
+      apiKeys: this.apiKeys,
+      scripts: this.scripts,
+      exported: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `luartor_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    this.logActivity('Exported all data');
+    this.showNotification('Data exported successfully!', 'success');
+  }
+
+  importKeys() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (data.keys) this.keys = data.keys;
+            if (data.apiKeys) this.apiKeys = data.apiKeys;
+            if (data.scripts) this.scripts = data.scripts;
+            
+            this.saveKeys();
+            this.saveApiKeys();
+            this.saveScripts();
+            this.updateDashboard();
+            this.renderKeyList();
+            this.renderApiKeyList();
+            this.logActivity('Imported data from file');
+            this.showNotification('Data imported successfully!', 'success');
+          } catch (error) {
+            this.showNotification('Error importing data: Invalid file format!', 'error');
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  }
+
+  clearAllKeys() {
+    if (confirm('Are you sure you want to clear ALL keys? This action cannot be undone!')) {
+      this.keys = [];
+      this.saveKeys();
+      this.renderKeyList();
+      this.updateDashboard();
+      this.logActivity('Cleared all keys');
+      this.showNotification('All keys cleared!', 'warning');
+    }
+  }
+
+  backupData() {
+    this.exportAllKeys();
+  }
+
+  restoreData() {
+    this.importKeys();
+  }
+
+  updateDashboard() {
+    document.getElementById('totalKeys').textContent = this.keys.length;
+    document.getElementById('activeKeys').textContent = this.keys.filter(k => k.status === 'active').length;
+    document.getElementById('usedKeys').textContent = this.keys.filter(k => k.used).length;
+    document.getElementById('apiCount').textContent = Object.keys(this.apiKeys).length;
+  }
+
+  logActivity(action) {
+    this.activityLog.push({
+      action: action,
+      timestamp: new Date().toISOString()
+    });
+    
+    if (this.activityLog.length > 100) {
+      this.activityLog = this.activityLog.slice(-50);
+    }
+    
+    this.saveActivityLog();
+    this.renderActivityLog();
+  }
+
+  showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.classList.add('show');
+
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 3000);
+  }
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function showQuickActions() {
+  document.getElementById('quickModal').classList.add('show');
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('show');
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    keySystem.showNotification('Copied to clipboard!', 'success');
+  }).catch(() => {
+    keySystem.showNotification('Failed to copy to clipboard!', 'error');
+  });
+}
+
+function generateRandomKeys(count) {
+  keySystem.generateRandomKeys(count);
+}
+
+function generateCustomKeys() {
+  keySystem.generateCustomKeys();
+}
+
+function saveGeneratedKeys() {
+  keySystem.saveGeneratedKeys();
+}
+
+function filterKeys() {
+  keySystem.filterKeys();
+}
+
+function addApiKey() {
+  keySystem.addApiKey();
+}
+
+function saveScript() {
+  keySystem.saveScript();
+}
+
+function exportAllKeys() {
+  keySystem.exportAllKeys();
+}
+
+function importKeys() {
+  keySystem.importKeys();
+}
+
+function clearAllKeys() {
+  keySystem.clearAllKeys();
+}
+
+function backupData() {
+  keySystem.backupData();
+}
+
+function restoreData() {
+  keySystem.restoreData();
+}
+
+const keySystem = new LuartorKeySystem();
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal')) {
+    e.target.classList.remove('show');
+  }
+});
+</script>
+</body>
+</html>
+
